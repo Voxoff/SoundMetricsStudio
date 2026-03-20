@@ -1,0 +1,16 @@
+[project]
+name = "chartmetric-mcp"
+version = "0.1.0"
+description = "MCP server for Chartmetric API via pycmc"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp[cli]",
+    "pycmc",
+]
+
+[project.scripts]
+chartmetric-mcp = "server:mcp"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
