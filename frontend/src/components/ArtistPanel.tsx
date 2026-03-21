@@ -11,7 +11,7 @@ interface Props {
 
 export function ArtistPanel({ onArtistContext }: Props) {
   const searchRef = useRef<HTMLInputElement>(null)
-  const { results, isLoading, error, search } = useArtistSearch()
+  const { results, isLoading, error, search, clear } = useArtistSearch()
   const { analysisText, status, isAnalyzing, analyze } = useAnalysisStream(onArtistContext)
 
   function doSearch() {
@@ -57,7 +57,7 @@ export function ArtistPanel({ onArtistContext }: Props) {
           <div className="results-label">{results.length} result{results.length !== 1 ? 's' : ''}</div>
         )}
         {!isLoading && results.map(a => (
-          <ArtistItem key={a.cm_id} artist={a} onClick={analyze} />
+          <ArtistItem key={a.cm_id} artist={a} onClick={(artist) => { clear(); analyze(artist) }} />
         ))}
         {!isLoading && !error && !hasResults && searchRef.current?.value && (
           <span className="dim-text">No results found.</span>
