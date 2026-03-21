@@ -23,35 +23,44 @@ export function ArtistPanel({ onArtistContext }: Props) {
   }
 
   const hasAnalysis = analysisText.length > 0
+  const hasResults = results.length > 0
 
   return (
     <div className="panel" id="artist-panel">
       <div className="panel-header">
-        <h2>Artist Intelligence</h2>
-        <p>Search Chartmetric, click an artist for a strategic analysis</p>
+        <div className="panel-title">
+          <span className="panel-title-icon">🎤</span>
+          Artist Intelligence
+        </div>
+        <p className="panel-subtitle">Search Chartmetric · click an artist for a strategic AI analysis</p>
       </div>
 
       <div id="search-row">
-        <input
-          ref={searchRef}
-          type="text"
-          id="search-input"
-          placeholder="Search artists…"
-          onKeyDown={handleSearchKey}
-        />
+        <div className="search-wrapper">
+          <span className="search-icon">🔍</span>
+          <input
+            ref={searchRef}
+            type="text"
+            id="search-input"
+            placeholder="Search artists…"
+            onKeyDown={handleSearchKey}
+          />
+        </div>
         <button className="btn" onClick={doSearch} disabled={isLoading}>
-          Search
+          {isLoading ? 'Searching…' : 'Search'}
         </button>
       </div>
 
       <div id="artist-results">
-        {isLoading && <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>Searching…</span>}
         {error && <span className="error-text">Search failed: {error}</span>}
+        {!isLoading && hasResults && (
+          <div className="results-label">{results.length} result{results.length !== 1 ? 's' : ''}</div>
+        )}
         {!isLoading && results.map(a => (
           <ArtistItem key={a.cm_id} artist={a} onClick={analyze} />
         ))}
-        {!isLoading && !error && results.length === 0 && searchRef.current?.value && (
-          <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>No results found.</span>
+        {!isLoading && !error && !hasResults && searchRef.current?.value && (
+          <span className="dim-text">No results found.</span>
         )}
       </div>
 
@@ -67,7 +76,11 @@ export function ArtistPanel({ onArtistContext }: Props) {
       <div id="analysis-area">
         {!hasAnalysis && (
           <div id="analysis-placeholder">
-            Search for an artist and click their name to generate a strategic analysis.
+            <div className="placeholder-icon">🎼</div>
+            <div className="placeholder-title">No artist loaded</div>
+            <div className="placeholder-sub">
+              Search for an artist above and click their card to generate a deep strategic analysis.
+            </div>
           </div>
         )}
         {hasAnalysis && (
