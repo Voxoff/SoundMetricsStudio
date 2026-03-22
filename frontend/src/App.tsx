@@ -6,6 +6,7 @@ import logo from './assets/logo.png'
 
 export default function App() {
   const [artistContext, setArtistContext] = useState<ArtistContext | null>(null)
+  const [activeTab, setActiveTab] = useState<'artist' | 'chat'>('artist')
 
   return (
     <div id="app-shell">
@@ -15,9 +16,29 @@ export default function App() {
           <span className="nav-tagline">AI-powered music analytics</span>
         </div>
       </nav>
+
+      <div id="mobile-tabs">
+        <button
+          className={`mobile-tab ${activeTab === 'artist' ? 'active' : ''}`}
+          onClick={() => setActiveTab('artist')}
+        >
+          🎤 Artist
+        </button>
+        <button
+          className={`mobile-tab ${activeTab === 'chat' ? 'active' : ''}`}
+          onClick={() => setActiveTab('chat')}
+        >
+          💬 Chat
+        </button>
+      </div>
+
       <div id="app-grid">
-        <ArtistPanel onArtistContext={setArtistContext} />
-        <ChatPanel artistContext={artistContext} onClearContext={() => setArtistContext(null)} />
+        <div className={`panel-wrapper ${activeTab === 'artist' ? 'tab-active' : ''}`}>
+          <ArtistPanel onArtistContext={(ctx) => { setArtistContext(ctx); setActiveTab('chat') }} />
+        </div>
+        <div className={`panel-wrapper ${activeTab === 'chat' ? 'tab-active' : ''}`}>
+          <ChatPanel artistContext={artistContext} onClearContext={() => setArtistContext(null)} />
+        </div>
       </div>
     </div>
   )
